@@ -2,7 +2,9 @@ package com.example.mareu.lists;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +18,8 @@ public class AddReu extends AppCompatActivity {
     AppBarLayout mAppBarLayout;
     Toolbar mToolbar;
     Spinner mSpinnerSalle;
+    DatePicker mDatePicker;
+    TimePicker mTimePicker;
     TextInputEditText mTextInputEditTextSujet;
     TextInputEditText mTextInputEditTextParticipant;
     Button mButtonAddReu;
@@ -29,6 +33,8 @@ public class AddReu extends AppCompatActivity {
         mAppBarLayout = findViewById(R.id.appBarAddReu);
         mToolbar = findViewById(R.id.toolBarAddReu);
         mSpinnerSalle = findViewById(R.id.spinnerSalle);
+        mDatePicker=findViewById(R.id.datePicker);
+        mTimePicker=findViewById(R.id.timePicker);
         mTextInputEditTextSujet = findViewById(R.id.textSujet);
         mTextInputEditTextParticipant = findViewById(R.id.ajoutParticipant);
         mButtonAddReu = findViewById(R.id.addReu);
@@ -40,4 +46,6 @@ public class AddReu extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
+
+
 }

@@ -74,11 +74,34 @@
 
             </TextView>
 
-            <CalendarView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:layout_gravity="center">
 
-            </CalendarView>
+            </DatePicker>
+
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner"
+                android:layout_gravity="center">
+
+            </TimePicker>
+
+          <!--  <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="230dp"
+                app:picker_curved="true"
+                app:picker_cyclic="true"
+                app:picker_visibleItemCount="7"
+                />-->
+
 
             <TextView
                 android:layout_width="match_parent"

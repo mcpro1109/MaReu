@@ -6,11 +6,14 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mareu.DI.DI;
 import com.example.mareu.R;
 import com.example.mareu.methods.Reunion;
+import com.example.mareu.model.ReunionApiService;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,22 +27,23 @@ public class ReunionsListActivity extends AppCompatActivity {
     private FloatingActionButton mAddReu;
     private List<Reunion> mReunion;
     MaReuRecyclerViewAdapter adapter;
+    private ReunionApiService mReunionApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mareu);
 
-            //implémenter la recyclerview
+        //implémenter la recyclerview
         mAppBarLayout = findViewById(R.id.appBar);
         mToolbar = findViewById(R.id.toolBar);
         mRecyclerView = findViewById(R.id.recyclerView);
         mAddReu = findViewById(R.id.addReu);
 
-       // mAddReu.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ReunionsListActivity.this, R.color.white)));
-
-      // MaReuRecyclerViewAdapter adapter=new MaReuRecyclerViewAdapter(mReunion);
+        mReunionApiService = DI.getService();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        MaReuRecyclerViewAdapter adapter = new MaReuRecyclerViewAdapter(mReunion);
         mRecyclerView.setAdapter(adapter);
 
 
@@ -54,4 +58,15 @@ public class ReunionsListActivity extends AppCompatActivity {
     }
 
 
+    //initialiser la liste des réunions
+    private void initList() {
+        mReunion = mReunionApiService.getReunions();
+        mRecyclerView.setAdapter(new MaReuRecyclerViewAdapter(mReunion));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initList();
+    }
 }

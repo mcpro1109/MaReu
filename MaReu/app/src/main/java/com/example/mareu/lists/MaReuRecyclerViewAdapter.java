@@ -20,7 +20,7 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
     private RecyclerViewClickListener listener;
 
     public MaReuRecyclerViewAdapter(List<Reunion> reunions) {
-        mReunions = reunions;
+        this.mReunions = reunions;
 
     }
 
@@ -33,6 +33,7 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
 
     @Override
     public void onBindViewHolder(@NonNull MaReuRecyclerViewAdapter.ViewHolder holder, int position) {
+       //envoyer les infos des réunions dans la recyclerview
         Reunion reunion = mReunions.get(position);
         holder.mReunionDescription.setText(reunion.getNomReunion());
 
@@ -43,6 +44,7 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
     public int getItemCount() {
         return mReunions.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
