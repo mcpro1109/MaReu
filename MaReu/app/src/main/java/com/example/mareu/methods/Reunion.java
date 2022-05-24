@@ -1,6 +1,8 @@
 package com.example.mareu.methods;
 
-public class Reunion {
+import java.io.Serializable;
+
+public class Reunion implements Serializable {
     private  String mNomReunion;
     private String mHeure;
     private String mSalle;

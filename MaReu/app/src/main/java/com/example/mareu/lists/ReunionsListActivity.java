@@ -55,6 +55,8 @@ public class ReunionsListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
 
