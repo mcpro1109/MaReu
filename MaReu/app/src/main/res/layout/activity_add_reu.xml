@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".lists.AddReu">
+    tools:context=".lists.AddReunionActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarAddReu"
@@ -61,52 +61,35 @@
             <Spinner
                 android:id="@+id/spinnerSalle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:layout_weight="1">
+
+                >
 
             </Spinner>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
                 android:text="Jour et Heure">
 
             </TextView>
 
-            <DatePicker
-                android:id="@+id/datePicker"
+            <EditText
+                android:id="@+id/date_time_input"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:calendarViewShown="false"
-                android:datePickerMode="spinner"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                >
+                android:layout_marginBottom="16dp"
+                android:hint="Sélectionner la date et l'heure">
 
-            </DatePicker>
-
-            <TimePicker
-                android:id="@+id/timePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:timePickerMode="spinner"
-                android:layout_gravity="center">
-
-            </TimePicker>
-
-          <!--  <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
-                android:layout_width="wrap_content"
-                android:layout_height="230dp"
-                app:picker_curved="true"
-                app:picker_cyclic="true"
-                app:picker_visibleItemCount="7"
-                />-->
-
+            </EditText>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
                 android:text="Sujet de la réunion">
 
             </TextView>
@@ -115,7 +98,7 @@
                 android:id="@+id/textSujet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:layout_marginBottom="16dp"
                 android:hint="Sujet">
 
             </com.google.android.material.textfield.TextInputEditText>
@@ -123,7 +106,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Participants (email)">
+                android:text="Participants (email)"
+                android:layout_marginBottom="16dp">
 
             </TextView>
 
@@ -131,20 +115,23 @@
                 android:id="@+id/ajoutParticipant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="participants (séparés par une virgule)">
+                android:hint="participants (séparés par une virgule)"
+                android:layout_marginBottom="16dp">
 
             </com.google.android.material.textfield.TextInputEditText>
 
-            <Button
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/buttonAddReu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
                 android:text="Ajoutez votre réunion"
+                android:textColor="@color/white"
                 app:backgroundTint="@color/colorPrimary">
 
-            </Button>
+            </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
 
         </LinearLayout>
 

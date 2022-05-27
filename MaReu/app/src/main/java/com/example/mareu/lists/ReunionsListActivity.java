@@ -43,7 +43,7 @@ public class ReunionsListActivity extends AppCompatActivity {
         mReunionApiService = DI.getService();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        MaReuRecyclerViewAdapter adapter = new MaReuRecyclerViewAdapter(mReunion);
+        //MaReuRecyclerViewAdapter adapter = new MaReuRecyclerViewAdapter(mReunion);
         mRecyclerView.setAdapter(adapter);
 
 
@@ -51,7 +51,7 @@ public class ReunionsListActivity extends AppCompatActivity {
         mAddReu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ReunionsListActivity.this, AddReu.class);
+                Intent intent = new Intent(ReunionsListActivity.this, AddReunionActivity.class);
                 startActivity(intent);
             }
         });
@@ -63,8 +63,16 @@ public class ReunionsListActivity extends AppCompatActivity {
     //initialiser la liste des réunions
     private void initList() {
         mReunion = mReunionApiService.getReunions();
-        mRecyclerView.setAdapter(new MaReuRecyclerViewAdapter(mReunion));
+        mRecyclerView.setAdapter(new MaReuRecyclerViewAdapter(mReunion, new MaReuRecyclerViewAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onDelete(View view, Reunion reunion) {
+                mReunionApiService.deleteReunion(reunion);
+                initList();
+            }
+        }));
     }
+
+
 
     @Override
     public void onResume() {

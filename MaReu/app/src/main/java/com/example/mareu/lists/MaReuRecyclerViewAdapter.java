@@ -25,9 +25,9 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
     private RecyclerViewClickListener listener;
     ReunionApiService mReunionApiService;
 
-    public MaReuRecyclerViewAdapter(List<Reunion> reunions) {
+    public MaReuRecyclerViewAdapter(List<Reunion> reunions, RecyclerViewClickListener listener) {
         this.mReunions = reunions;
-
+        this.listener=listener;
 
     }
 
@@ -42,15 +42,14 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
     public void onBindViewHolder(@NonNull MaReuRecyclerViewAdapter.ViewHolder holder, int position) {
         //envoyer les infos des réunions dans la recyclerview et mise en page
         Reunion reunion = mReunions.get(position);
-        //holder.mReunionDescription.setText(reunion.getNomReunion()+" - " +reunion.getHeure()+" - " +reunion.getSalle()+ " \n " +reunion.getParticipants());
-
-        SpannableStringBuilder text = new SpannableStringBuilder(reunion.getNomReunion() + " - " + reunion.getHeure() + " - " + reunion.getSalle() + " \n " + reunion.getParticipants());
-        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        String firstLine=reunion.getNomReunion() + " - " + reunion.getHeure() + " - " + reunion.getSalle();
+        SpannableStringBuilder text = new SpannableStringBuilder( firstLine + " \n" + reunion.getParticipants());
+        text.setSpan(new StyleSpan(Typeface.BOLD), 0, firstLine.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.mReunionDescription.setText(text);
 
        // supprimer une réunion
-        //holder.mDelete.setOnClickListener(view -> listener.onDelete(view, reunion));
-        holder.mDelete.setOnClickListener(view -> mReunionApiService.deleteReunion(reunion));
+        holder.mDelete.setOnClickListener(view -> listener.onDelete(view, reunion));
+
     }
 
     @Override

@@ -15,7 +15,7 @@ public class SalleReunion {
             new SalleReunion("Link"),
             new SalleReunion("Zelda"),
             new SalleReunion("Donkeykong"),
-            new SalleReunion("Sonic"),
+            new SalleReunion("Harmonie"),
             new SalleReunion("Pikachu"),
             new SalleReunion("Yoshi")
     );
