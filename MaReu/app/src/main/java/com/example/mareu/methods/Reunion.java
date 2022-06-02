@@ -48,6 +48,4 @@ public class Reunion implements Serializable {
     public void setParticipants(String participants) {
         this.mParticipants = participants;
     }
-
-
 }

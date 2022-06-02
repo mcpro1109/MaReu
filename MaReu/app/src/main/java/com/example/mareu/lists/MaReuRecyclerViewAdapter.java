@@ -62,14 +62,12 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
 
         public ImageView mReunionAvatar;
         public TextView mReunionDescription;
-
         public ImageView mDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mReunionAvatar = itemView.findViewById(R.id.item_list_avatar);
             mReunionDescription = itemView.findViewById(R.id.item_list_name);
-
             mDelete = itemView.findViewById(R.id.item_list_delete_button);
         }
     }
@@ -78,5 +76,7 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
 
         void onDelete(View view, Reunion reunion);
     }
+
+
 
 }

@@ -2,9 +2,12 @@ package com.example.mareu.model;
 
 import com.example.mareu.methods.Reunion;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class DummiReunionApiService implements ReunionApiService {
+
 
     private final List<Reunion> reunions = ReunionGenerator.generateReunion();
 
@@ -27,4 +30,11 @@ public class DummiReunionApiService implements ReunionApiService {
     public void createReunion(Reunion reunion) {
         reunions.add(reunion);
     }
+
+    @Override
+    public Collection<? extends Reunion> getReunionsFilteredByTime(Date time) {
+        return null;
+    }
+
+
 }

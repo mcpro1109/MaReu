@@ -1,24 +1,27 @@
 package com.example.mareu.lists;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.mareu.DI.DI;
 import com.example.mareu.R;
 import com.example.mareu.methods.Reunion;
 import com.example.mareu.model.ReunionApiService;
 import com.example.mareu.model.SalleReunion;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -37,9 +40,11 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     EditText mDateTime;
     TextInputEditText mTextInputEditTextSujet;
     TextInputEditText mTextInputEditTextParticipant;
-    Button mButtonAddReu;
-    ReunionApiService mApiService;
+    ExtendedFloatingActionButton mButtonAddReu;
+    ReunionApiService mApiService= DI.getService();
     SalleReunion mSalleReunion;
+
+    public static final String result = "nouvellereunion";
 
 
     @Override
@@ -53,15 +58,10 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         mDateTime = findViewById(R.id.date_time_input);
         mTextInputEditTextSujet = findViewById(R.id.textSujet);
         mTextInputEditTextParticipant = findViewById(R.id.ajoutParticipant);
-        mButtonAddReu = findViewById(R.id.addReu);
+        mButtonAddReu = findViewById(R.id.buttonAddReu);
 
         //calendrier et heure
-        mDateTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateTimeDialog(mDateTime);
-            }
-        });
+        mDateTime.setOnClickListener(view -> showDateTimeDialog(mDateTime));
 
 
         //retour en arrière avec la toolbar
@@ -94,27 +94,27 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
         //ajouter la réunion
 
-       /* mButtonAddReu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addReunion();
-            }
-        });*/
+        mButtonAddReu.setOnClickListener(view -> {
+            //  addReunion();
+
+            Log.d("bouton", " bouton marche");
+
+            Reunion newReunion = new Reunion( mTextInputEditTextSujet.getEditableText().toString() ,
+                    mDateTime.getEditableText().toString() ,
+                    mSpinnerSalle.getSelectedItem().toString() ,
+                    mTextInputEditTextParticipant.getEditableText().toString());
+            mApiService.createReunion(newReunion);
+            Intent intent = getIntent();
+
+            setResult(Activity.RESULT_OK, intent);
+
+            finish();
+        });
 
 
     }
 
-    private void addReunion() {
-        Reunion reunion = new Reunion(
-                mTextInputEditTextSujet.getEditableText().toString(),
-                mDateTime.getFontFeatureSettings(),
-                mSpinnerSalle.getSelectedItem().toString(),
-                mTextInputEditTextSujet.getEditableText().toString()
 
-        );
-        mApiService.createReunion(reunion);
-        finish();
-    }
 
     //affichage du calendrier et timer
 
@@ -162,4 +162,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+
 }

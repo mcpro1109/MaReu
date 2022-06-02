@@ -11,7 +11,5 @@ public class DI {
         return service;
     }
 
-    public static ReunionApiService getNewInstanceApiService() {
-        return new DummiReunionApiService();
-    }
+
 }

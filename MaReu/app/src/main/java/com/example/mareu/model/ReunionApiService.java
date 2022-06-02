@@ -2,6 +2,8 @@ package com.example.mareu.model;
 
 import com.example.mareu.methods.Reunion;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public interface ReunionApiService {
@@ -16,4 +18,5 @@ public interface ReunionApiService {
     //création de la réunion
     void createReunion(Reunion reunion);
 
+    Collection<? extends Reunion> getReunionsFilteredByTime(Date time);
 }

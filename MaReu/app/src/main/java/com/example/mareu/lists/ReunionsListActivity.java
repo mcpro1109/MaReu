@@ -1,8 +1,14 @@
 package com.example.mareu.lists;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +23,7 @@ import com.example.mareu.model.ReunionApiService;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class ReunionsListActivity extends AppCompatActivity {
@@ -27,7 +34,10 @@ public class ReunionsListActivity extends AppCompatActivity {
     private FloatingActionButton mAddReu;
     private List<Reunion> mReunion;
     MaReuRecyclerViewAdapter adapter;
-    private ReunionApiService mReunionApiService;
+    private ReunionApiService mReunionApiService=DI.getService();
+
+    int code = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,43 +50,120 @@ public class ReunionsListActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
         mAddReu = findViewById(R.id.addReu);
 
-        mReunionApiService = DI.getService();
+mToolbar.inflateMenu(R.menu.menu);
+mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter_date:
+                dateDialog();
+
+                return true;
+            case R.id.filter_salle:
+                lieuReunion();
+                return true;
+            case R.id.reset:
+                resetFilter();
+            default:
+               return false;
+        }
+
+    }
+});
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        //MaReuRecyclerViewAdapter adapter = new MaReuRecyclerViewAdapter(mReunion);
         mRecyclerView.setAdapter(adapter);
+
 
 
         //ajouter une réunion
         mAddReu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(ReunionsListActivity.this, AddReunionActivity.class);
-                startActivity(intent);
+                // startActivity(intent);
+                startActivityForResult(intent, code);
+
             }
         });
+        initList();
+    }
 
+
+
+    private void resetFilter() {
+        // mReunion.clear();
+        Log.d("reset", "bouton reset");
+        //mReunion.addAll(mReunionApiService.getReunions());
+        Log.d("reset2", "mmm");
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    private void lieuReunion() {
 
     }
 
+
+    private void dateDialog() {
+        int selectedYear = 2022;
+        int selectedMonth = 6;
+        int selectedDayOfMonth = 1;
+
+// Date Select Listener.
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(year, month, day);
+                mReunion.clear();
+                mReunion.addAll(mReunionApiService.getReunionsFilteredByTime(cal.getTime()));
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+        };
+
+// Create DatePickerDialog (Spinner Mode):
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
+
+// Show
+        datePickerDialog.show();
+
+    }
 
     //initialiser la liste des réunions
     private void initList() {
         mReunion = mReunionApiService.getReunions();
-        mRecyclerView.setAdapter(new MaReuRecyclerViewAdapter(mReunion, new MaReuRecyclerViewAdapter.RecyclerViewClickListener() {
-            @Override
-            public void onDelete(View view, Reunion reunion) {
-                mReunionApiService.deleteReunion(reunion);
-                initList();
-            }
+        mRecyclerView.setAdapter(new MaReuRecyclerViewAdapter(mReunion, (view, reunion) -> {
+            mReunionApiService.deleteReunion(reunion);
+            initList();
         }));
     }
 
-
-
+    //methode appelée quand la réunion est ajoutée
     @Override
-    public void onResume() {
-        super.onResume();
-        initList();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == code) {
+            if (resultCode == Activity.RESULT_OK) {
+
+
+
+                Toast.makeText(ReunionsListActivity.this, "ajout de la réunion", Toast.LENGTH_SHORT);
+
+
+
+                initList();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(ReunionsListActivity.this, "annulation", Toast.LENGTH_SHORT);
+            }
+        }
     }
+
+
+
 }
