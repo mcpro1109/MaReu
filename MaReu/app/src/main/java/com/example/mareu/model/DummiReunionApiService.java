@@ -1,8 +1,13 @@
 package com.example.mareu.model;
 
+import static java.util.Calendar.DAY_OF_YEAR;
+
+import android.util.Log;
+
 import com.example.mareu.methods.Reunion;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +15,7 @@ public class DummiReunionApiService implements ReunionApiService {
 
 
     private final List<Reunion> reunions = ReunionGenerator.generateReunion();
+    private String salle;
 
     //accés à la réunion
     @Override
@@ -31,9 +37,38 @@ public class DummiReunionApiService implements ReunionApiService {
         reunions.add(reunion);
     }
 
+    //filtre par date
     @Override
-    public Collection<? extends Reunion> getReunionsFilteredByTime(Date time) {
-        return null;
+    public List<Reunion> getReunionsFilteredByTime(Date date) {
+        List<Reunion> reunionByDate = new ArrayList<>();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date);
+        Log.d("date2", "date=" + cal1);
+        for (int i = 0; i < reunions.size(); i++) {
+            Calendar cal2 = Calendar.getInstance();
+           // cal2.setTime(reunions.get(i).getDate());
+
+            Log.d("date3", "date=" + cal2);
+            boolean sameDay = cal1.get(DAY_OF_YEAR) == cal2.get(DAY_OF_YEAR) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+            if (sameDay) reunionByDate.add(reunions.get(i));
+            Log.d("date4", "date=" + sameDay);
+        }
+
+        return reunionByDate;
+
+    }
+
+
+    //filtre par salle
+    @Override
+    public List<Reunion> getReunionsByPlace(String name) {
+        List<Reunion> reunionByPlace = new ArrayList<>();
+        for (Reunion reunion : reunions) {
+            if (reunion.getSalle().equals(salle)) {
+                reunionByPlace.add(reunion);
+            }
+        }
+        return reunionByPlace;
     }
 
 

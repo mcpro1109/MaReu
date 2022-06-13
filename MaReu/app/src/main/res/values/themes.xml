@@ -14,5 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    
+    <style name="Theme.PopupOverlay.Menu" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 </resources>

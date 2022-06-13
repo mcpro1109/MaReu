@@ -77,12 +77,22 @@
             </TextView>
 
             <EditText
-                android:id="@+id/date_time_input"
+                android:id="@+id/date_input"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="center"
+                android:editable="false"
+                android:hint="Sélectionner la date">
+            </EditText>
+
+            <EditText
+                android:id="@+id/time_input"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                android:hint="Sélectionner la date et l'heure">
+                android:editable="false"
+                android:hint="Sélectionner l'heure">
 
             </EditText>
 

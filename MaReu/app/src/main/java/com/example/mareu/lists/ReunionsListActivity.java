@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +36,7 @@ public class ReunionsListActivity extends AppCompatActivity {
     private FloatingActionButton mAddReu;
     private List<Reunion> mReunion;
     MaReuRecyclerViewAdapter adapter;
-    private ReunionApiService mReunionApiService=DI.getService();
+    private ReunionApiService mReunionApiService = DI.getService();
 
     int code = 2;
 
@@ -49,66 +51,69 @@ public class ReunionsListActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolBar);
         mRecyclerView = findViewById(R.id.recyclerView);
         mAddReu = findViewById(R.id.addReu);
+        mToolbar.inflateMenu(R.menu.menu);
 
-mToolbar.inflateMenu(R.menu.menu);
-mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.filter_date:
-                dateDialog();
-
-                return true;
-            case R.id.filter_salle:
-                lieuReunion();
-                return true;
-            case R.id.reset:
-                resetFilter();
-            default:
-               return false;
-        }
-
-    }
-});
+        //filtres selon date et lieu dans la recyclerview
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.filter_date:
+                        dateDialog();
+                        return true;
+                    case R.id.filter_salle:
+                        lieuReunion();
+                        return true;
+                    case R.id.reset:
+                        resetFilter();
+                    default:
+                        return false;
+                }
+            }
+        });
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
 
-
-
         //ajouter une réunion
         mAddReu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(ReunionsListActivity.this, AddReunionActivity.class);
-                // startActivity(intent);
                 startActivityForResult(intent, code);
-
             }
         });
         initList();
     }
 
 
-
     private void resetFilter() {
-        // mReunion.clear();
+         mReunion.clear();
         Log.d("reset", "bouton reset");
-        //mReunion.addAll(mReunionApiService.getReunions());
+        mReunion.addAll(mReunionApiService.getReunions());
         Log.d("reset2", "mmm");
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private void lieuReunion() {
+     /*  mReunion.addAll(mReunionApiService.getReunionsByPlace());
+        mRecyclerView.getAdapter().notifyDataSetChanged();*/
+        SalleFragmentDialog salleFragmentDialog = new SalleFragmentDialog();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("salles");
+       /* if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);*/
 
+        salleFragmentDialog.show(ft, "salles");
     }
 
 
     private void dateDialog() {
         int selectedYear = 2022;
-        int selectedMonth = 6;
+        int selectedMonth = 5;
         int selectedDayOfMonth = 1;
 
 // Date Select Listener.
@@ -119,7 +124,8 @@ mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, day);
                 mReunion.clear();
-                mReunion.addAll(mReunionApiService.getReunionsFilteredByTime(cal.getTime()));
+                Log.d("date1", "date=" + cal);
+               mReunion.addAll(mReunionApiService.getReunionsFilteredByTime(cal.getTime()));
                 mRecyclerView.getAdapter().notifyDataSetChanged();
             }
 
@@ -149,13 +155,7 @@ mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) {
-
-
-
                 Toast.makeText(ReunionsListActivity.this, "ajout de la réunion", Toast.LENGTH_SHORT);
-
-
-
                 initList();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -163,7 +163,6 @@ mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             }
         }
     }
-
 
 
 }
