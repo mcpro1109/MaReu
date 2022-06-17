@@ -18,15 +18,12 @@ import java.util.List;
 public class SalleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<SalleFragmentRecyclerViewAdapter.ViewHolder> {
     private final List<Room> mSalleReunions;
     private RecyclerViewClickListener listener;
-    private ReunionApiService mReunionApiService = DI.getService();
+    private ReunionApiService mReunionApiService = DI.getReunionService();
 
     public SalleFragmentRecyclerViewAdapter(List<Room> salleReunions, RecyclerViewClickListener listener) {
         this.mSalleReunions = salleReunions;
         this.listener = listener;
     }
-
-
-
 
     @Override
     public SalleFragmentRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,10 +35,14 @@ public class SalleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Salle
     public void onBindViewHolder(@NonNull SalleFragmentRecyclerViewAdapter.ViewHolder holder, int position) {
         //ajouter toutes les salles de réunion
         Room meetingRoom = mSalleReunions.get(position);
-        holder.mSalle.setText(meetingRoom.getName());
-        holder.itemView.setOnClickListener(v -> {
-            listener.onClick(v, holder.getAdapterPosition());
-          //  mSalleReunions.add(mReunionApiService.getReunionsByPlace(meetingRoom.getName()));
+        holder.mRoom.setText(meetingRoom.getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(v, meetingRoom);
+
+            }
         });
 
     }
@@ -54,16 +55,16 @@ public class SalleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Salle
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mSalle;
+        public TextView mRoom;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mSalle = itemView.findViewById(R.id.nomSalle);
+            mRoom = itemView.findViewById(R.id.RoomName);
         }
     }
 
     public interface RecyclerViewClickListener {
-        void onClick(View v, int position);
+        void onClick(View v, Room room);
 
     }
 

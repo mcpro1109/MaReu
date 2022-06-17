@@ -13,31 +13,31 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mareu.DI.DI_rooms;
+import com.example.mareu.DI.DI;
 import com.example.mareu.R;
+import com.example.mareu.methods.Reunion;
 import com.example.mareu.methods.Room;
-import com.example.mareu.model.SalleApiService;
+import com.example.mareu.model.ReunionApiService;
+import com.example.mareu.model.RoomApiService;
 
 import java.util.List;
 
-public class SalleFragmentDialog extends DialogFragment {
+public class RoomFragmentDialog extends DialogFragment {
 
     RecyclerView mRecyclerView;
-    SalleFragmentRecyclerViewAdapter adapter;
-    private SalleApiService mSalleApiService= DI_rooms.getService();
-    private List<Room> mSalles;
-
+    private RoomApiService mRoomApiService = DI.getRoomService();
+    private ReunionApiService mReunionApiService = DI.getReunionService();
+    private static List<Reunion> mReunion;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_salles_filtre, container, false);
+        View view = inflater.inflate(R.layout.fragment_rooms_filtre, container, false);
         Context context = view.getContext();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.filtreSalle);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.filtreRoom);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        mRecyclerView.setAdapter(adapter);
         initList();
         return view;
     }
@@ -58,9 +58,15 @@ public class SalleFragmentDialog extends DialogFragment {
 
     //initialiser la liste des réunions
     private void initList() {
-        mSalles = mSalleApiService.getSalles();
-        mRecyclerView.setAdapter(new SalleFragmentRecyclerViewAdapter(mSalles, (view, reunion) -> {
-            initList();
+        mReunion= mReunionApiService.getReunions();
+
+        mRecyclerView.setAdapter(new SalleFragmentRecyclerViewAdapter(mRoomApiService.getRooms(), new SalleFragmentRecyclerViewAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, Room room) {
+                ReunionsListActivity.filterByRoom(room);
+                //filtre par salle dans la recyclerview
+initList();
+            }
         }));
     }
 }

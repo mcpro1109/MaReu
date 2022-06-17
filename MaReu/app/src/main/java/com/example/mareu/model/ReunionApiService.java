@@ -20,5 +20,6 @@ public interface ReunionApiService {
     //filtres
    List <Reunion> getReunionsFilteredByTime(Date date);
 
+
     List<Reunion> getReunionsByPlace(String name);
 }

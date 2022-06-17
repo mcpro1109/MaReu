@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mareu.DI.DI;
 import com.example.mareu.R;
 import com.example.mareu.methods.Reunion;
+import com.example.mareu.methods.Room;
 import com.example.mareu.model.ReunionApiService;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
@@ -30,13 +30,12 @@ import java.util.List;
 
 public class ReunionsListActivity extends AppCompatActivity {
 
-    private AppBarLayout mAppBarLayout;
+
     private Toolbar mToolbar;
-    private RecyclerView mRecyclerView;
+    private static RecyclerView mRecyclerView;
     private FloatingActionButton mAddReu;
-    private List<Reunion> mReunion;
-    MaReuRecyclerViewAdapter adapter;
-    private ReunionApiService mReunionApiService = DI.getService();
+    private static List<Reunion> mReunion;
+    private static ReunionApiService mReunionApiService = DI.getReunionService();
 
     int code = 2;
 
@@ -47,7 +46,7 @@ public class ReunionsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mareu);
 
         //implémenter la recyclerview
-        mAppBarLayout = findViewById(R.id.appBar);
+
         mToolbar = findViewById(R.id.toolBar);
         mRecyclerView = findViewById(R.id.recyclerView);
         mAddReu = findViewById(R.id.addReu);
@@ -61,7 +60,7 @@ public class ReunionsListActivity extends AppCompatActivity {
                     case R.id.filter_date:
                         dateDialog();
                         return true;
-                    case R.id.filter_salle:
+                    case R.id.filter_room:
                         lieuReunion();
                         return true;
                     case R.id.reset:
@@ -74,7 +73,7 @@ public class ReunionsListActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(adapter);
+
 
         //ajouter une réunion
         mAddReu.setOnClickListener(new View.OnClickListener() {
@@ -89,27 +88,32 @@ public class ReunionsListActivity extends AppCompatActivity {
 
 
     private void resetFilter() {
-         mReunion.clear();
+        // mReunion.clear();
         Log.d("reset", "bouton reset");
+        initList();
         mReunion.addAll(mReunionApiService.getReunions());
-        Log.d("reset2", "mmm");
+        Log.d("reset2", mReunionApiService.getReunions().toString());
         mRecyclerView.getAdapter().notifyDataSetChanged();
+
+
     }
 
     private void lieuReunion() {
-     /*  mReunion.addAll(mReunionApiService.getReunionsByPlace());
-        mRecyclerView.getAdapter().notifyDataSetChanged();*/
-        SalleFragmentDialog salleFragmentDialog = new SalleFragmentDialog();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag("salles");
-       /* if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);*/
 
-        salleFragmentDialog.show(ft, "salles");
+        RoomFragmentDialog roomFragmentDialog = new RoomFragmentDialog();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("rooms");
+
+        roomFragmentDialog.show(ft, "rooms");
+
+
     }
 
+    public static void filterByRoom(Room room) {
+        mReunion.clear();
+        mReunion.addAll(mReunionApiService.getReunionsByPlace(room.getName()));
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
 
     private void dateDialog() {
         int selectedYear = 2022;
@@ -125,7 +129,7 @@ public class ReunionsListActivity extends AppCompatActivity {
                 cal.set(year, month, day);
                 mReunion.clear();
                 Log.d("date1", "date=" + cal);
-               mReunion.addAll(mReunionApiService.getReunionsFilteredByTime(cal.getTime()));
+                mReunion.addAll(mReunionApiService.getReunionsFilteredByTime(cal.getTime()));
                 mRecyclerView.getAdapter().notifyDataSetChanged();
             }
 
@@ -155,11 +159,11 @@ public class ReunionsListActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(ReunionsListActivity.this, "ajout de la réunion", Toast.LENGTH_SHORT);
+                Toast.makeText(ReunionsListActivity.this, "ajout de la réunion", Toast.LENGTH_SHORT).show();
                 initList();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(ReunionsListActivity.this, "annulation", Toast.LENGTH_SHORT);
+                Toast.makeText(ReunionsListActivity.this, "annulation", Toast.LENGTH_SHORT).show();
             }
         }
     }

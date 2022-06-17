@@ -9,7 +9,7 @@
 
         />
     <item
-        android:id="@+id/filter_salle"
+        android:id="@+id/filter_room"
         android:title="filtrer par salle"
         app:showAsAction="never" />
     <item

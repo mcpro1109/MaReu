@@ -6,15 +6,15 @@ public class Reunion implements Serializable {
     private String mNomReunion;
     private String mDate;
     private String mHeure;
-    private Room mSalle;
+    private Room mRoom;
     private String mParticipants;
 
 
-    public Reunion(String nomReunion, String date, String heure, Room salle, String participants) {
+    public Reunion(String nomReunion, String date, String heure, Room room, String participants) {
         this.mNomReunion = nomReunion;
         this.mDate = date;
         this.mHeure = heure;
-        this.mSalle = salle;
+        this.mRoom = room;
         this.mParticipants = participants;
     }
 
@@ -42,12 +42,12 @@ public class Reunion implements Serializable {
         this.mHeure = heure;
     }
 
-    public Room getSalle() {
-        return mSalle;
+    public Room getRoom() {
+        return mRoom;
     }
 
-    public void setSalle(Room salle) {
-        this.mSalle = salle;
+    public void setRoom(Room room) {
+        this.mRoom = room;
     }
 
     public String getParticipants() {

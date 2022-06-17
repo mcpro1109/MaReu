@@ -59,7 +59,7 @@
             </TextView>
 
             <Spinner
-                android:id="@+id/spinnerSalle"
+                android:id="@+id/spinnerRoom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"

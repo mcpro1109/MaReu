@@ -19,7 +19,7 @@ import com.example.mareu.R;
 import com.example.mareu.methods.Reunion;
 import com.example.mareu.methods.Room;
 import com.example.mareu.model.ReunionApiService;
-import com.example.mareu.model.SalleReunion;
+import com.example.mareu.model.RoomApiService;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,15 +36,15 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
     AppBarLayout mAppBarLayout;
     Toolbar mToolbar;
-    Spinner mSpinnerSalle;
+    Spinner mSpinnerRoom;
     EditText mDateTime;
     EditText mHourTime;
     TextInputEditText mTextInputEditTextSujet;
     TextInputEditText mTextInputEditTextParticipant;
     ExtendedFloatingActionButton mButtonAddReu;
-    ReunionApiService mApiService = DI.getService();
-    SalleReunion mSalleReunion;
-    Room rooms;
+    ReunionApiService mApiService = DI.getReunionService();
+    RoomApiService mRoomApiService = DI.getRoomService();
+
 
     public static final String result = "nouvellereunion";
 
@@ -56,7 +56,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
         mAppBarLayout = findViewById(R.id.appBarAddReu);
         mToolbar = findViewById(R.id.toolBarAddReu);
-        mSpinnerSalle = findViewById(R.id.spinnerSalle);
+        mSpinnerRoom = findViewById(R.id.spinnerRoom);
         mDateTime = findViewById(R.id.date_input);
         mHourTime = findViewById(R.id.time_input);
         mTextInputEditTextSujet = findViewById(R.id.textSujet);
@@ -76,26 +76,16 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
         //remplir le spinner
 
-        mSpinnerSalle.setOnItemSelectedListener(this);
+        mSpinnerRoom.setOnItemSelectedListener(this);
 
+        List<String> roomNames = new ArrayList<>();
+        for (Room room : mRoomApiService.getRooms()) {
+            roomNames.add(room.getName());
+        }
 
-        List<String> salles = new ArrayList<String>();
-
-        salles.add("mario");
-        salles.add("Luigi");
-        salles.add("Peach");
-        salles.add("Todd");
-        salles.add("Warrio");
-        salles.add("Link");
-        salles.add("Zelda");
-        salles.add("Donkeykong");
-        salles.add("Harmonie");
-        salles.add("Pikachu");
-        salles.add("Yoshi");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,salles);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, roomNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerSalle.setAdapter(adapter);
+        mSpinnerRoom.setAdapter(adapter);
 
 
         //ajouter la réunion
@@ -103,11 +93,10 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         mButtonAddReu.setOnClickListener(view -> {
 
             Reunion newReunion = new Reunion(mTextInputEditTextSujet.getEditableText().toString(),
-// A VOIR
-                   mDateTime.getEditableText().toString(),
+
+                    mDateTime.getEditableText().toString(),
                     mHourTime.getEditableText().toString(),
-                    (Room) mSpinnerSalle.getSelectedItem(),
-                    //getSelectedItem().toString(),
+                    mRoomApiService.getRoomByName(mSpinnerRoom.getSelectedItem().toString()),
                     mTextInputEditTextParticipant.getEditableText().toString());
             mApiService.createReunion(newReunion);
             Intent intent = getIntent();
@@ -135,7 +124,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
                 false)
                 .show();
     }
-
 
 
     //affichage du calendrier

@@ -6,6 +6,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,7 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
     public MaReuRecyclerViewAdapter(List<Reunion> reunions, RecyclerViewClickListener listener) {
         this.mReunions = reunions;
         this.listener = listener;
-
     }
-
 
     @Override
     public MaReuRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,18 +48,21 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
     public void onBindViewHolder(@NonNull MaReuRecyclerViewAdapter.ViewHolder holder, int position) {
         //envoyer les infos des réunions dans la recyclerview et mise en page
         Reunion reunion = mReunions.get(position);
-        String firstLine = reunion.getDate() + reunion.getHeure() + " \n" + reunion.getNomReunion() + " - " + reunion.getSalle().getName();
-        SpannableStringBuilder text = new SpannableStringBuilder(firstLine + " \n" + reunion.getParticipants());
+        String  dateLine= reunion.getDate() + reunion.getHeure();
+        String secondLine = reunion.getNomReunion() + " - " + reunion.getRoom().getName();
 
-        text.setSpan(new StyleSpan(Typeface.ITALIC), 0, 17, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 18, firstLine.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        text.setSpan(new ForegroundColorSpan(Color.BLACK), 18, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder text = new SpannableStringBuilder(dateLine + " \n" + secondLine + " \n" + reunion.getParticipants());
 
+        text.setSpan(new StyleSpan(Typeface.ITALIC), 0, dateLine.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //text.setSpan(new StyleSpan(Typeface.BOLD),dateLine.length()+1 , secondLine.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new StyleSpan(Typeface.BOLD),dateLine.length() , 35, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text.setSpan(new ForegroundColorSpan(Color.BLACK), secondLine.length(), text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Log.d("long", "longueur" + secondLine.length()); //17
         holder.mReunionDescription.setText(text);
 
         //affichage de l'image selon la salle
         Glide.with(holder.mImageViewAvatar.getContext())
-                .load("https://ui-avatars.com/api/?name=" + reunion.getSalle().getName() + "&background=" + reunion.getSalle().getColorHex())
+                .load("https://ui-avatars.com/api/?name=" + reunion.getRoom().getName() + "&background=" + reunion.getRoom().getColorHex())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.mImageViewAvatar);
 

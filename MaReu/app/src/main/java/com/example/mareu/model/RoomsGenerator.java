@@ -2,15 +2,13 @@ package com.example.mareu.model;
 
 import com.example.mareu.methods.Room;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SalleReunion {
+public class RoomsGenerator {
 
-    private String mSalleReunion;
 
-    public static List<Room> DummySalleReunion = Arrays.asList(
+    public static List<Room> rooms = Arrays.asList(
             new Room("Peach", "F1ADF5"),
             new Room("Mario", "E2360B"),
             new Room("Luigi", "1AB84F"),
@@ -24,11 +22,4 @@ public class SalleReunion {
             new Room("Yoshi", "74E719")
     );
 
-  /*  public SalleReunion(String salleReunion, String ffffff) {
-        this.mSalleReunion=salleReunion;
-    }*/
-
-    static List<Room> generateSalle() {
-        return new ArrayList<>(DummySalleReunion);
-    }
 }

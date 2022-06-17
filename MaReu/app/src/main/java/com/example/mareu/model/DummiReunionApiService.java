@@ -5,6 +5,7 @@ import static java.util.Calendar.DAY_OF_YEAR;
 import android.util.Log;
 
 import com.example.mareu.methods.Reunion;
+import com.example.mareu.methods.Room;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,7 +16,7 @@ public class DummiReunionApiService implements ReunionApiService {
 
 
     private final List<Reunion> reunions = ReunionGenerator.generateReunion();
-    private String salle;
+    private Room mRoom;
 
     //accés à la réunion
     @Override
@@ -46,7 +47,7 @@ public class DummiReunionApiService implements ReunionApiService {
         Log.d("date2", "date=" + cal1);
         for (int i = 0; i < reunions.size(); i++) {
             Calendar cal2 = Calendar.getInstance();
-           // cal2.setTime(reunions.get(i).getDate());
+          //  cal2.setTime(reunions.get(i).getDate());
 
             Log.d("date3", "date=" + cal2);
             boolean sameDay = cal1.get(DAY_OF_YEAR) == cal2.get(DAY_OF_YEAR) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
@@ -64,12 +65,28 @@ public class DummiReunionApiService implements ReunionApiService {
     public List<Reunion> getReunionsByPlace(String name) {
         List<Reunion> reunionByPlace = new ArrayList<>();
         for (Reunion reunion : reunions) {
-            if (reunion.getSalle().equals(salle)) {
+            if (reunion.getRoom().equals(mRoom)) {
+                Log.d("resultat", String.valueOf(mRoom));
                 reunionByPlace.add(reunion);
             }
         }
+       // Log.d("ajoutfiltre", String.valueOf(reunionByPlace));
         return reunionByPlace;
+
+
+      /*  List<Reunion> reunionByPlace = new ArrayList<>();
+        for (Reunion reunion : reunions) {
+            Log.d("resultat", String.valueOf(reunion));
+            if (reunion.getRoom().equals(name)) {
+               // Log.d("resultat", String.valueOf(reunions));
+                reunionByPlace.add(reunion);
+            }
+        }
+        Log.d("ajoutfiltre", String.valueOf(reunionByPlace));
+        return reunionByPlace;*/
+
     }
+
 
 
 }
