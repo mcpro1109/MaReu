@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,7 +72,7 @@ public class TestsReunions {
 
     @Test
     public void filterReunionByRoomWithSuccess() {
-        List<Reunion> reunion = mApiService.getReunionsByPlace(mApiService.getReunions().get(0).getNomReunion());
+        List<Reunion> reunion = mApiService.getReunionsFilterByPlace(mApiService.getReunions().get(0).getNomReunion());
         for (Reunion reunion1 : reunion) {
             String mRoom = "Peach";
             if (reunion1.getNomReunion().equals(mRoom)) {
@@ -79,7 +81,9 @@ public class TestsReunions {
         }
     }
 
-  /*  @Test
+    //pb mock  Method d in android.util.Log not mocked
+    //suppression des log ça marche pourquoi?
+    @Test
     public void filterReunionByDateWithSuccess() {
         int year = 2022;
         int month = 8;
@@ -90,13 +94,16 @@ public class TestsReunions {
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
         calendar.set(year, month, dayOfMonth);
-        calendar2.set(year, month, dayOfMonth + 1);
+        calendar2.set(year, month, dayOfMonth+1);
         Date date1 = calendar.getTime();
         Date date2 = calendar2.getTime();
         for (Reunion reunion : reunionList) {
-            assertTrue(reunion.getDate().after(date1));
-            assertTrue(reunion.getDate().before(date2));
+           Date dateReunion= new Date(reunion.getDate());
+           assertEquals(dateReunion, date1);
+           assertEquals(true, dateReunion.equals(date2));
+
         }
 
-    }*/
+    }
+
 }

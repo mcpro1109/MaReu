@@ -63,9 +63,10 @@ public class RoomFragmentDialog extends DialogFragment {
         mRecyclerView.setAdapter(new SalleFragmentRecyclerViewAdapter(mRoomApiService.getRooms(), new SalleFragmentRecyclerViewAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, Room room) {
+               // ReunionsListActivity.filterByRoom(room);
                 ReunionsListActivity.filterByRoom(room);
                 //filtre par salle dans la recyclerview
-initList();
+                initList();
             }
         }));
     }

@@ -21,5 +21,10 @@ public interface ReunionApiService {
    List <Reunion> getReunionsFilteredByTime(Date date);
 
 
-    List<Reunion> getReunionsByPlace(String name);
+    List<Reunion> getReunionsFilterByPlace(String name);
+
+
+    Object getReunionByDate();
+
+    Object getReunionByDate(String date);
 }

@@ -30,7 +30,7 @@ public class Reunion implements Serializable {
         return mDate;
     }
 
-    public void setDate(String date) {
+        public void setDate(String date) {
         mDate = date;
     }
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -31,12 +30,13 @@ import java.util.List;
 public class ReunionsListActivity extends AppCompatActivity {
 
 
+
     private Toolbar mToolbar;
     private static RecyclerView mRecyclerView;
     private FloatingActionButton mAddReu;
     private static List<Reunion> mReunion;
     private static ReunionApiService mReunionApiService = DI.getReunionService();
-
+    private static MaReuRecyclerViewAdapter adapter;
     int code = 2;
 
 
@@ -88,13 +88,10 @@ public class ReunionsListActivity extends AppCompatActivity {
 
 
     private void resetFilter() {
-        // mReunion.clear();
-        Log.d("reset", "bouton reset");
-        initList();
+        mReunion.clear();
         mReunion.addAll(mReunionApiService.getReunions());
-        Log.d("reset2", mReunionApiService.getReunions().toString());
-        mRecyclerView.getAdapter().notifyDataSetChanged();
-
+       // mRecyclerView.getAdapter().notifyDataSetChanged();
+        mRecyclerView.setAdapter(adapter);
 
     }
 
@@ -103,16 +100,17 @@ public class ReunionsListActivity extends AppCompatActivity {
         RoomFragmentDialog roomFragmentDialog = new RoomFragmentDialog();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("rooms");
-
         roomFragmentDialog.show(ft, "rooms");
-
 
     }
 
     public static void filterByRoom(Room room) {
         mReunion.clear();
-        mReunion.addAll(mReunionApiService.getReunionsByPlace(room.getName()));
-        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mReunion.addAll(mReunionApiService.getReunionsFilterByPlace(room.getName()));
+       // mRecyclerView.getAdapter().notifyDataSetChanged();
+       // adapter.update(room);
+        adapter.update((List<Reunion>) room);
+        mRecyclerView.setAdapter(adapter);
     }
 
     private void dateDialog() {
@@ -120,7 +118,7 @@ public class ReunionsListActivity extends AppCompatActivity {
         int selectedMonth = 5;
         int selectedDayOfMonth = 1;
 
-// Date Select Listener.
+        // Date Select Listener.
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -128,18 +126,22 @@ public class ReunionsListActivity extends AppCompatActivity {
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, day);
                 mReunion.clear();
-                Log.d("date1", "date=" + cal);
-                mReunion.addAll(mReunionApiService.getReunionsFilteredByTime(cal.getTime()));
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+                // Log.d("date1", "date=" + cal);
+                List<Reunion> reunions = mReunionApiService.getReunionsFilteredByTime(cal.getTime());
+                mReunion.addAll(reunions);
+                // adapter.notifyDataSetChanged();
+                //mRecyclerView.getAdapter().notifyDataSetChanged();
+                adapter.update(reunions);
+                mRecyclerView.setAdapter(adapter);
             }
 
         };
 
-// Create DatePickerDialog (Spinner Mode):
+        // Create DatePickerDialog (Spinner Mode):
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
 
-// Show
+        // Show
         datePickerDialog.show();
 
     }

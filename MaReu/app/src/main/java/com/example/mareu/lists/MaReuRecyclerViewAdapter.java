@@ -99,5 +99,10 @@ public class MaReuRecyclerViewAdapter extends RecyclerView.Adapter<MaReuRecycler
         void onDelete(View view, Reunion reunion);
     }
 
+    public void update(List<Reunion> reunions) {
 
+    notifyItemInserted(reunions.size());
+        MaReuRecyclerViewAdapter mRecyclerView2= new MaReuRecyclerViewAdapter(reunions, listener );
+
+    }
 }

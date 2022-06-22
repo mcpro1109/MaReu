@@ -93,7 +93,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         mButtonAddReu.setOnClickListener(view -> {
 
             Reunion newReunion = new Reunion(mTextInputEditTextSujet.getEditableText().toString(),
-
                     mDateTime.getEditableText().toString(),
                     mHourTime.getEditableText().toString(),
                     mRoomApiService.getRoomByName(mSpinnerRoom.getSelectedItem().toString()),
@@ -137,7 +136,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             calendar.set(Calendar.DAY_OF_MONTH, day);
 
             SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yy");
-            mDateTime.setText(simpleDateFormat1.format(calendar.getTime()).toString());
+            mDateTime.setText(simpleDateFormat1.format(calendar.getTime()));
 
         };
         //affichage calendrier
