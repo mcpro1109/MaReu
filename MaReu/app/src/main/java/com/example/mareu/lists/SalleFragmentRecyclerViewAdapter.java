@@ -8,20 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mareu.DI.DI;
 import com.example.mareu.R;
 import com.example.mareu.methods.Room;
-import com.example.mareu.model.ReunionApiService;
 
 import java.util.List;
 
 public class SalleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<SalleFragmentRecyclerViewAdapter.ViewHolder> {
-    private final List<Room> mSalleReunions;
+
+    private final List<Room> salleReunions;
     private RecyclerViewClickListener listener;
-    private ReunionApiService mReunionApiService = DI.getReunionService();
 
     public SalleFragmentRecyclerViewAdapter(List<Room> salleReunions, RecyclerViewClickListener listener) {
-        this.mSalleReunions = salleReunions;
+        this.salleReunions = salleReunions;
         this.listener = listener;
     }
 
@@ -34,24 +32,16 @@ public class SalleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Salle
     @Override
     public void onBindViewHolder(@NonNull SalleFragmentRecyclerViewAdapter.ViewHolder holder, int position) {
         //ajouter toutes les salles de réunion
-        Room meetingRoom = mSalleReunions.get(position);
+        Room meetingRoom = salleReunions.get(position);
         holder.mRoom.setText(meetingRoom.getName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(v, meetingRoom);
-
-            }
-        });
-
+        holder.itemView.setOnClickListener(v -> listener.onClick(v, meetingRoom));
     }
 
     @Override
     public int getItemCount() {
-        return mSalleReunions.size();
+        return salleReunions.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -65,8 +55,6 @@ public class SalleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Salle
 
     public interface RecyclerViewClickListener {
         void onClick(View v, Room room);
-
     }
-
 
 }

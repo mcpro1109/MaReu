@@ -20,10 +20,11 @@ import static org.junit.Assert.assertThat;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import com.example.mareu.DI.DI;
 import com.example.mareu.lists.ReunionsListActivity;
@@ -41,19 +42,19 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class ReunionListInstrumentalTest {
 
-    private ReunionsListActivity mListActivity;
-    private ReunionApiService mApiService;
+    private ReunionsListActivity listActivity;
+    private ReunionApiService apiService;
     private static int ITEMS_COUNT = 3;
 
     @Rule
-    public ActivityTestRule<ReunionsListActivity> mActivityTestRule = new ActivityTestRule<>(ReunionsListActivity.class);
+    public ActivityTestRule<ReunionsListActivity> activityTestRule = new ActivityTestRule<>(ReunionsListActivity.class);
 
 
     @Before
     public void Setup() {
-        mListActivity = mActivityTestRule.getActivity();
-        assertThat(mListActivity, notNullValue());
-        mApiService = DI.getReunionService();
+        listActivity = activityTestRule.getActivity();
+        assertThat(listActivity, notNullValue());
+        apiService = DI.getReunionService();
     }
 
     //vérifier si la liste n'est pas vide
@@ -94,10 +95,10 @@ public class ReunionListInstrumentalTest {
         onView(withId(R.id.recyclerView)).check(withItemCount(1));
     }
 
-    //flitre reset
+    //filtre reset
     @Test
     public void filterResetWithSuccess() {
-        int size = mApiService.getReunions().size();
+        int size = apiService.getReunions().size();
         onView(withId(R.id.filter_room)).perform(click());
         onView(withText("Peach")).check(matches(isNotChecked())).perform();
         onView(withText("Peach")).perform(click());
@@ -106,8 +107,9 @@ public class ReunionListInstrumentalTest {
     }
 
     //ajouter une réunion
+    @Test
     public void addNewMeetingWithSuccess() {
-        int size = mApiService.getReunions().size();
+        int size = apiService.getReunions().size();
 
         onView(withId(R.id.addReu)).perform(click());
 

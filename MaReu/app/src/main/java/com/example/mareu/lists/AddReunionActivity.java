@@ -113,7 +113,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
 
-            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm aaa");
+            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(" HH:mm");
             mHourTime.setText(simpleDateFormat2.format(calendar.getTime()).toString());
         };
         //affichage timer
@@ -135,7 +135,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, day);
 
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yy");
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
             mDateTime.setText(simpleDateFormat1.format(calendar.getTime()));
 
         };

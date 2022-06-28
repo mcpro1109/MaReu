@@ -20,9 +20,9 @@ private static Room harmonie=new Room("Harmonie", "71F1EF");
 private static Room pikachu=new Room("Pikachu", "DDF03D");
 private static Room yochi=new Room("Yoshi", "74E719");
     public static List<Reunion> DummyReunion = Arrays.asList(
-            new Reunion("Réunion A", "12/07/2022"," 14h00", peach, "maxime@lamzone.com, alex@lamzone.com, sylvia@lamzone.com, louis@lamzone.com"),
+            new Reunion("Réunion A", "06/07/2022"," 14h00", peach, "maxime@lamzone.com, alex@lamzone.com, sylvia@lamzone.com, louis@lamzone.com"),
             new Reunion("Réunion B", "18/08/2022"," 16h00", mario, "paul@lamzone.com, viviane@lamzone.com, tom@lamzone.com"),
-            new Reunion("Réunion C", "06/09/2022"," 10h00", luigi, "amandine@lamzone.com, luc@lamzone.com, sylvia@lamzone.com, louis@lamzone.com")
+            new Reunion("Réunion C", "16/09/2022"," 10h00", luigi, "amandine@lamzone.com, luc@lamzone.com, sylvia@lamzone.com, louis@lamzone.com")
     );
 
     static List<Reunion> generateReunion(){return new ArrayList<>(DummyReunion);}

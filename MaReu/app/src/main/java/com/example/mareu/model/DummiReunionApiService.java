@@ -1,36 +1,26 @@
 package com.example.mareu.model;
 
-import static java.util.Calendar.DAY_OF_YEAR;
-
-import android.util.Log;
-
 import com.example.mareu.methods.Reunion;
-import com.example.mareu.methods.Room;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public class DummiReunionApiService implements ReunionApiService {
 
-
     private final List<Reunion> reunions = ReunionGenerator.generateReunion();
-    private Room mRoom;
 
     //accés à la réunion
     @Override
     public List<Reunion> getReunions() {
-        return reunions;
+        return new ArrayList<>(reunions);
     }
-
 
     //suppression de la réunion
     @Override
     public void deleteReunion(Reunion reunion) {
         reunions.remove(reunion);
-
     }
 
     //création de la réunion
@@ -45,67 +35,33 @@ public class DummiReunionApiService implements ReunionApiService {
         List<Reunion> reunionByDate = new ArrayList<>();
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(date);
-//        Log.d("date2", "date=" + cal1);
         for (int i = 0; i < reunions.size(); i++) {
             Calendar cal2 = Calendar.getInstance();
-           //cal2.setTime(reunions.get(i).getDate());
-            String date2=reunions.get(i).getDate();
-            cal2.setTimeZone(TimeZone.getTimeZone(date2));
-          //  Log.d("date3", "date=" + cal2);
-            boolean sameDay = cal1.get(DAY_OF_YEAR) == cal2.get(DAY_OF_YEAR) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+           // Log.d("cal1", "cal1: " + cal1);
+            Date date2= new Date(reunions.get(i).getDateReunion());
+           // date du jour cal2.setTimeZone(TimeZone.getTimeZone(date2));
+            cal2.setTime(date2);
+         //   Log.d("cal2", "cal2: " + cal2);
+           /* boolean sameDay = cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
             if (sameDay) reunionByDate.add(reunions.get(i));
-          //  Log.d("date4", "date=" + sameDay);
+           Log.d("boll", "getReunionsFilteredByTime: " + sameDay);*/
+            if (cal1.before(cal2)){
+                reunionByDate.add(reunions.get(i));
+            }
         }
-
         return reunionByDate;
 
     }
 
-
     //filtre par salle
     @Override
-    public List<Reunion> getReunionsFilterByPlace(String name) {
-        List<Reunion> reunionByPlace = new ArrayList<>();
+    public List<Reunion> getReunionsFilteredByRoom(String name) {
+        List<Reunion> reunionByRoom = new ArrayList<>();
         for (Reunion reunion : reunions) {
-            if (reunion.getRoom().equals(mRoom)) {
-                Log.d("resultat", String.valueOf(mRoom));
-                reunionByPlace.add(reunion);
+            if (reunion.getRoom().getName().equalsIgnoreCase(name)) {
+                reunionByRoom.add(reunion);
             }
         }
-       // Log.d("ajoutfiltre", String.valueOf(reunionByPlace));
-        return reunionByPlace;
-
-
-      /*  List<Reunion> reunionByPlace = new ArrayList<>();
-        for (Reunion reunion : reunions) {
-            Log.d("resultat", String.valueOf(reunion));
-            if (reunion.getRoom().equals(name)) {
-               // Log.d("resultat", String.valueOf(reunions));
-                reunionByPlace.add(reunion);
-            }
-        }
-        Log.d("ajoutfiltre", String.valueOf(reunionByPlace));
-        return reunionByPlace;*/
-
+        return reunionByRoom;
     }
-
-    @Override
-    public Object getReunionByDate() {
-        return null;
-    }
-
-    @Override
-    public Object getReunionByDate(String date) {
-      /*  for (Reunion reunion:
-                reunions
-        ) {
-            if (reunion.getDate().equals(date)){
-                return  reunion;
-            }
-        }*/
-
-        return null;
-    }
-
-
 }

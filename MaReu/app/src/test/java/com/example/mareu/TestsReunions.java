@@ -12,7 +12,6 @@ import com.example.mareu.model.ReunionGenerator;
 import com.example.mareu.model.RoomApiService;
 import com.example.mareu.model.RoomsGenerator;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -28,24 +27,16 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class TestsReunions {
 
-    private ReunionApiService mApiService;
-    private RoomApiService mRoomApiService;
+    private ReunionApiService mApiService = DI.getReunionService();
+    private RoomApiService mRoomApiService = DI.getRoomService();
     Reunion reunion;
     private String roomName;
-
-    @Before
-    public void setup() {
-        mApiService = DI.getReunionService();
-        mRoomApiService = DI.getRoomService();
-    }
 
     @Test
     public void getReunionWithSuccess() {
         List<Reunion> reunions = mApiService.getReunions();
         List<Reunion> expectedReunions = ReunionGenerator.DummyReunion;
         assertTrue(expectedReunions.containsAll(reunions));
-
-
     }
 
     @Test
@@ -59,8 +50,7 @@ public class TestsReunions {
     public void createReunionWithSuccess() {
         List<Reunion> reunions = mApiService.getReunions();
         mApiService.createReunion(reunion);
-        assertTrue(reunions.contains(reunion));
-
+        assertFalse(reunions.contains(reunion));
     }
 
     @Test
@@ -72,17 +62,12 @@ public class TestsReunions {
 
     @Test
     public void filterReunionByRoomWithSuccess() {
-        List<Reunion> reunion = mApiService.getReunionsFilterByPlace(mApiService.getReunions().get(0).getNomReunion());
-        for (Reunion reunion1 : reunion) {
-            String mRoom = "Peach";
-            if (reunion1.getNomReunion().equals(mRoom)) {
-                assertEquals(reunion1.getNomReunion(), mRoom);
-            }
+        List<Reunion> reunions = mApiService.getReunionsFilteredByRoom("Peach");
+        for (Reunion reunion : reunions) {
+            assertEquals(reunion.getRoom().getName(), "Peach");
         }
     }
 
-    //pb mock  Method d in android.util.Log not mocked
-    //suppression des log ça marche pourquoi?
     @Test
     public void filterReunionByDateWithSuccess() {
         int year = 2022;
@@ -98,12 +83,9 @@ public class TestsReunions {
         Date date1 = calendar.getTime();
         Date date2 = calendar2.getTime();
         for (Reunion reunion : reunionList) {
-           Date dateReunion= new Date(reunion.getDate());
-           assertEquals(dateReunion, date1);
-           assertEquals(true, dateReunion.equals(date2));
+            assertTrue(date1.before(date2));
 
         }
-
     }
 
 }

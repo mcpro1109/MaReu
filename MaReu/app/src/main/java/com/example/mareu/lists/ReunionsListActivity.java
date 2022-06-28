@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,21 +20,24 @@ import com.example.mareu.methods.Room;
 import com.example.mareu.model.ReunionApiService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class ReunionsListActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
+    private static RecyclerView recyclerView;
+    private FloatingActionButton addReuFloatingButton;
 
+    private static ReunionApiService reunionApiService = DI.getReunionService();
+    private static List<Reunion> reunionList = new ArrayList<>();
+    private static MaReuRecyclerViewAdapter adapter = new MaReuRecyclerViewAdapter(reunionApiService.getReunions(), (view, reunion) -> {
+        reunionApiService.deleteReunion(reunion);
+        refreshList();
+    });
 
-    private Toolbar mToolbar;
-    private static RecyclerView mRecyclerView;
-    private FloatingActionButton mAddReu;
-    private static List<Reunion> mReunion;
-    private static ReunionApiService mReunionApiService = DI.getReunionService();
-    private static MaReuRecyclerViewAdapter adapter;
     int code = 2;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,94 +46,57 @@ public class ReunionsListActivity extends AppCompatActivity {
 
         //implémenter la recyclerview
 
-        mToolbar = findViewById(R.id.toolBar);
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mAddReu = findViewById(R.id.addReu);
-        mToolbar.inflateMenu(R.menu.menu);
+        toolbar = findViewById(R.id.toolBar);
+        recyclerView = findViewById(R.id.recyclerView);
+        addReuFloatingButton = findViewById(R.id.addReu);
+        toolbar.inflateMenu(R.menu.menu);
 
         //filtres selon date et lieu dans la recyclerview
-        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.filter_date:
-                        dateDialog();
-                        return true;
-                    case R.id.filter_room:
-                        lieuReunion();
-                        return true;
-                    case R.id.reset:
-                        resetFilter();
-                    default:
-                        return false;
-                }
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.filter_date:
+                    dateDialog();
+                    return true;
+                case R.id.filter_room:
+                    lieuReunion();
+                    return true;
+                case R.id.reset:
+                    resetFilter();
+                default:
+                    return false;
             }
         });
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
 
         //ajouter une réunion
-        mAddReu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ReunionsListActivity.this, AddReunionActivity.class);
-                startActivityForResult(intent, code);
-            }
+        addReuFloatingButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ReunionsListActivity.this, AddReunionActivity.class);
+            startActivityForResult(intent, code);
         });
-        initList();
-    }
-
-
-    private void resetFilter() {
-        mReunion.clear();
-        mReunion.addAll(mReunionApiService.getReunions());
-       // mRecyclerView.getAdapter().notifyDataSetChanged();
-        mRecyclerView.setAdapter(adapter);
-
     }
 
     private void lieuReunion() {
-
+        //ajouter le fragmentdialog
         RoomFragmentDialog roomFragmentDialog = new RoomFragmentDialog();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("rooms");
         roomFragmentDialog.show(ft, "rooms");
-
-    }
-
-    public static void filterByRoom(Room room) {
-        mReunion.clear();
-        mReunion.addAll(mReunionApiService.getReunionsFilterByPlace(room.getName()));
-       // mRecyclerView.getAdapter().notifyDataSetChanged();
-       // adapter.update(room);
-        adapter.update((List<Reunion>) room);
-        mRecyclerView.setAdapter(adapter);
     }
 
     private void dateDialog() {
-        int selectedYear = 2022;
-        int selectedMonth = 5;
-        int selectedDayOfMonth = 1;
+        Calendar cal = Calendar.getInstance();
+        int selectedYear =cal.get(Calendar.YEAR);
+        int selectedMonth = cal.get(Calendar.MONTH);
+        int selectedDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 
         // Date Select Listener.
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(year, month, day);
-                mReunion.clear();
-                // Log.d("date1", "date=" + cal);
-                List<Reunion> reunions = mReunionApiService.getReunionsFilteredByTime(cal.getTime());
-                mReunion.addAll(reunions);
-                // adapter.notifyDataSetChanged();
-                //mRecyclerView.getAdapter().notifyDataSetChanged();
-                adapter.update(reunions);
-                mRecyclerView.setAdapter(adapter);
-            }
-
+        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
+            cal.set(year, month, day);
+            adapter.update(reunionApiService.getReunionsFilteredByTime(cal.getTime()));
+            //Log.d("filter", "dateDialog: " + cal.getTime());
         };
 
         // Create DatePickerDialog (Spinner Mode):
@@ -143,16 +105,11 @@ public class ReunionsListActivity extends AppCompatActivity {
 
         // Show
         datePickerDialog.show();
-
     }
 
     //initialiser la liste des réunions
-    private void initList() {
-        mReunion = mReunionApiService.getReunions();
-        mRecyclerView.setAdapter(new MaReuRecyclerViewAdapter(mReunion, (view, reunion) -> {
-            mReunionApiService.deleteReunion(reunion);
-            initList();
-        }));
+    private static void refreshList() {
+        adapter.update(reunionApiService.getReunions());
     }
 
     //methode appelée quand la réunion est ajoutée
@@ -161,14 +118,17 @@ public class ReunionsListActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(ReunionsListActivity.this, "ajout de la réunion", Toast.LENGTH_SHORT).show();
-                initList();
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(ReunionsListActivity.this, "annulation", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(ReunionsListActivity.this, "ajout de la réunion", Toast.LENGTH_SHORT).show();
+                refreshList();
             }
         }
     }
 
+    private void resetFilter() {
+        refreshList();
+    }
 
+    public static void filterByRoom(Room room) {
+        adapter.update(reunionApiService.getReunionsFilteredByRoom(room.getName()));
+    }
 }

@@ -3,58 +3,58 @@ package com.example.mareu.methods;
 import java.io.Serializable;
 
 public class Reunion implements Serializable {
-    private String mNomReunion;
-    private String mDate;
-    private String mHeure;
-    private Room mRoom;
-    private String mParticipants;
+    private String nomReunion;
+    private String dateReunion;
+    private String heure;
+    private Room room;
+    private String participants;
 
 
     public Reunion(String nomReunion, String date, String heure, Room room, String participants) {
-        this.mNomReunion = nomReunion;
-        this.mDate = date;
-        this.mHeure = heure;
-        this.mRoom = room;
-        this.mParticipants = participants;
+        this.nomReunion = nomReunion;
+        this.dateReunion = date;
+        this.heure = heure;
+        this.room = room;
+        this.participants = participants;
     }
 
     public String getNomReunion() {
-        return mNomReunion;
+        return nomReunion;
     }
 
     public void setNomReunion(String nomReunion) {
-        this.mNomReunion = nomReunion;
+        this.nomReunion = nomReunion;
     }
 
-    public String getDate() {
-        return mDate;
+    public String getDateReunion() {
+        return dateReunion;
     }
 
-        public void setDate(String date) {
-        mDate = date;
+        public void setDateReunion(String dateReunion) {
+        this.dateReunion = dateReunion;
     }
 
     public String getHeure() {
-        return mHeure;
+        return heure;
     }
 
     public void setHeure(String heure) {
-        this.mHeure = heure;
+        this.heure = heure;
     }
 
     public Room getRoom() {
-        return mRoom;
+        return room;
     }
 
     public void setRoom(Room room) {
-        this.mRoom = room;
+        this.room = room;
     }
 
     public String getParticipants() {
-        return mParticipants;
+        return participants;
     }
 
     public void setParticipants(String participants) {
-        this.mParticipants = participants;
+        this.participants = participants;
     }
 }

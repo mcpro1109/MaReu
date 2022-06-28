@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface ReunionApiService {
 
-
     //accés à la réunion
     List<Reunion> getReunions();
 
@@ -17,14 +16,8 @@ public interface ReunionApiService {
     //création de la réunion
     void createReunion(Reunion reunion);
 
-    //filtres
-   List <Reunion> getReunionsFilteredByTime(Date date);
+    //filters
+    List<Reunion> getReunionsFilteredByTime(Date date);
 
-
-    List<Reunion> getReunionsFilterByPlace(String name);
-
-
-    Object getReunionByDate();
-
-    Object getReunionByDate(String date);
+    List<Reunion> getReunionsFilteredByRoom(String name);
 }
