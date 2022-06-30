@@ -14,4 +14,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Mareu"
 include ':app'
-include ':mylibrary'

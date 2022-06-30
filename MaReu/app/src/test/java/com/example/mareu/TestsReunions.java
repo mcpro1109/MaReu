@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.example.mareu.DI.DI;
 import com.example.mareu.methods.Reunion;
 import com.example.mareu.methods.Room;
 import com.example.mareu.model.ReunionApiService;

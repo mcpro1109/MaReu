@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mareu.DI.DI;
+import com.example.mareu.DI;
 import com.example.mareu.R;
 import com.example.mareu.methods.Reunion;
 import com.example.mareu.methods.Room;

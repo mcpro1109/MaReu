@@ -1,4 +1,4 @@
-package com.example.mareu.DI;
+package com.example.mareu;
 
 import com.example.mareu.model.DummiReunionApiService;
 import com.example.mareu.model.DummyRoomApiService;

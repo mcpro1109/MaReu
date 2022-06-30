@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.mareu.DI.DI;
+import com.example.mareu.DI;
 import com.example.mareu.R;
 import com.example.mareu.methods.Reunion;
 import com.example.mareu.methods.Room;
