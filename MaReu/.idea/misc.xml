@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Grahf/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout-car/car_alert_dialog_button_bar.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Grahf/Documents/mareu/MaReu/MaReu/app/src/main/res/layout/activity_add_reu.xml" value="0.317481884057971" />
+        <entry key="..\:/Users/Grahf/Documents/mareu/MaReu/MaReu/app/src/main/res/layout/activity_mareu.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/grahf/Documents/Mareu2/MaReu/app/src/main/res/layout/activity_add_reu.xml" value="0.33" />
         <entry key="..\:/Users/grahf/Documents/Mareu2/MaReu/app/src/main/res/layout/activity_mareu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/grahf/Documents/Mareu2/MaReu/app/src/main/res/layout/fragment_filtre_recyclerview.xml" value="0.36666666666666664" />
